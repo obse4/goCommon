@@ -6,9 +6,20 @@ import (
 
 func TestInitLogger(t *testing.T) {
 	InitLogger(&LogConfig{
-		LogLevel: 0,
-		LogOut:   true,
-		// LogFile:  `C:\Users\tankk\Desktop\code\github.obse4\goCommon\log`,
+		LogOut: true,
 	})
-	Info("HELLO %s", "world")
+	Info("Hello %s", "world")
+}
+
+func TestLoggerLevel(t *testing.T) {
+	InitLogger(&LogConfig{
+		LogLevel: WarnLevel,
+		LogOut:   true,
+		StayDay:  1,
+	})
+
+	Debug("Hello %s", "world")
+	Info("Hello %s", "world")
+	Warn("Hello %s", "world")
+	Error("Hello %s", "world")
 }
