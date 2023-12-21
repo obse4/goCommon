@@ -119,20 +119,21 @@ func checkAndChangeLogFile() {
 			return
 		}
 
-		logOut.(*os.File).Close()
+		if osFile, ok := logOut.(*os.File); ok {
+			osFile.Close()
+		}
 		postFix := now.Add(-24 * time.Hour).Format("20060102") //昨天的日期
 		if err := os.Rename(logFile, logFile+"."+postFix); err != nil {
-			Warn("append date postfix %s to log file %s failed: %v\n", postFix, logFile, err)
+			fmt.Printf("append date postfix %s to log file %s failed: %v\n", postFix, logFile, err)
 			return
 		}
-
 		if stayDay > 0 {
 			removeHistoryLogFile()
 		}
 
 		var err error
 		if logOut, err = os.OpenFile(logFile, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0664); err != nil {
-			Warn("create log file %s failed %v\n", logFile, err)
+			fmt.Printf("create log file %s failed %v\n", logFile, err)
 			return
 		} else {
 			debugLogger = log.New(logOut, "[DEBUG] ", log.LstdFlags)
