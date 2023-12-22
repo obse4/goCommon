@@ -21,6 +21,7 @@ var (
 	infoLogger  *log.Logger
 	warnLogger  *log.Logger
 	errorLogger *log.Logger
+	fatalLogger *log.Logger
 
 	//默认的LogLevel为0，即所有级别的日志都打印
 	logLevel LogLeveL = 0
@@ -42,6 +43,7 @@ const (
 	InfoLevel                  //InfoLevel=iota, iota=1
 	WarnLevel                  //WarnLevel=iota, iota=2
 	ErrorLevel                 //ErrorLevel=iota, iota=3
+	FatalLevel                 //ErrorLevel=iota, iota=4
 )
 
 // 日志配置
@@ -104,6 +106,7 @@ func (l *LogConfig) setLogFile() {
 	infoLogger = log.New(logOut, "[INFO] ", log.LstdFlags)
 	warnLogger = log.New(logOut, "[WARN] ", log.LstdFlags)
 	errorLogger = log.New(logOut, "[ERROR] ", log.LstdFlags)
+	errorLogger = log.New(logOut, "[Fatal] ", log.LstdFlags)
 	day = now.YearDay()
 	dayChangeLock = sync.RWMutex{}
 
@@ -189,6 +192,13 @@ func Error(format string, v ...interface{}) {
 	if logLevel <= ErrorLevel {
 		checkAndChangeLogFile()
 		errorLogger.Printf(addPrefix()+" "+format, v...)
+	}
+}
+
+func Fatal(format string, v ...interface{}) {
+	if logLevel <= FatalLevel {
+		checkAndChangeLogFile()
+		fatalLogger.Fatalf(addPrefix()+" "+format, v...)
 	}
 }
 
