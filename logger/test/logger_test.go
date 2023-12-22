@@ -39,3 +39,7 @@ func TestRunTime(t *testing.T) {
 	time.Sleep(time.Second)
 	logger.TimeEnd(ctx, "TestRunTime").Debug()
 }
+
+func TestDefaultLog(t *testing.T) {
+	logger.Info("Hello %s", "world")
+}

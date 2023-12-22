@@ -268,3 +268,7 @@ func removeHistoryLogFile() {
 		}
 	}
 }
+
+func init() {
+	InitLogger(&LogConfig{})
+}
