@@ -5,7 +5,7 @@ go 1.21
 require (
 	github.com/gertd/go-pluralize v0.2.1
 	github.com/gomodule/redigo v1.8.9
-	github.com/obse4/goCommon/logger v0.0.0-20231222012824-9161c1fb093c
+	github.com/obse4/goCommon/logger v0.0.0-20231222093552-375702198ad5
 	go.mongodb.org/mongo-driver v1.13.1
 	gorm.io/driver/mysql v1.5.2
 	gorm.io/driver/postgres v1.5.4

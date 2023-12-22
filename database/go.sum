@@ -25,8 +25,8 @@ github.com/klauspost/compress v1.13.6 h1:P76CopJELS0TiO2mebmnzgWaajssP/EszplttgQ
 github.com/klauspost/compress v1.13.6/go.mod h1:/3/Vjq9QcHkK5uEr5lBEmyoZ1iFhe47etQ6QUkpK6sk=
 github.com/montanaflynn/stats v0.0.0-20171201202039-1bf9dbcd8cbe h1:iruDEfMl2E6fbMZ9s0scYfZQ84/6SPL6zC8ACM2oIL0=
 github.com/montanaflynn/stats v0.0.0-20171201202039-1bf9dbcd8cbe/go.mod h1:wL8QJuTMNUDYhXwkmfOly8iTdp5TEcJFWZD2D7SIkUc=
-github.com/obse4/goCommon/logger v0.0.0-20231222012824-9161c1fb093c h1:GEJdfLVZgPy4T9AFWZ8IeqD7kvQE0a9HGoQI7iys/uM=
-github.com/obse4/goCommon/logger v0.0.0-20231222012824-9161c1fb093c/go.mod h1:lQ2Bl1OZODWYUn9z5C1hjiLFtCqNfhCpHw2kwgDIKv8=
+github.com/obse4/goCommon/logger v0.0.0-20231222093552-375702198ad5 h1:L3v5oMdkayXkJk72xDrVXBAsi/7RYXYyrH6FI07WUNA=
+github.com/obse4/goCommon/logger v0.0.0-20231222093552-375702198ad5/go.mod h1:lQ2Bl1OZODWYUn9z5C1hjiLFtCqNfhCpHw2kwgDIKv8=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=

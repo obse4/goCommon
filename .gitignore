@@ -1,3 +1,4 @@
 /logger/log
 /logger/log.*
 /logger/test/log
+/httpserver/docs

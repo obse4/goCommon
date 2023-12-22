@@ -1,4 +1,7 @@
 go 1.21
 
-use ./logger
-use ./database
+use (
+    ./logger
+	./database
+	./httpserver
+)
