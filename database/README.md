@@ -8,7 +8,7 @@ import (
 )
 
 // 配置
-var mysql = MysqlConfig{
+var mysql = database.MysqlConfig{
 	Name: "mysql测试",
 	Username: "admin",
 	Password: "123456",
@@ -95,7 +95,7 @@ import (
     "time"
 )
 
-var mongodb = MongoConfig{
+var mongodb = database.MongoConfig{
 	Name: "mongo测试",
 	Url:  "127.0.0.1",
 	Port: "27017",
