@@ -106,7 +106,7 @@ func (l *LogConfig) setLogFile() {
 	infoLogger = log.New(logOut, "[INFO] ", log.LstdFlags)
 	warnLogger = log.New(logOut, "[WARN] ", log.LstdFlags)
 	errorLogger = log.New(logOut, "[ERROR] ", log.LstdFlags)
-	errorLogger = log.New(logOut, "[Fatal] ", log.LstdFlags)
+	fatalLogger = log.New(logOut, "[Fatal] ", log.LstdFlags)
 	day = now.YearDay()
 	dayChangeLock = sync.RWMutex{}
 
