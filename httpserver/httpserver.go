@@ -114,15 +114,14 @@ func (h *HttpServerConfig) Init() {
 		Addr:    port,
 		Handler: h.Router,
 	}
-
-	logger.Info("Server Listen:%s", h.Port)
-
+	logger.Info("--- Server Start ---")
+	logger.Info("--- Server Listen:%s ---", h.Port)
 	go func() {
+
 		// 开启goroutine启动服务
 		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 			logger.Fatal("Server Fatal: %v", err)
 		}
-		logger.Info("--- Server Start ---")
 	}()
 
 	// 等待中断信号来优雅地关闭服务器，为关闭服务器操作设置一个5秒的超时
@@ -143,6 +142,6 @@ func (h *HttpServerConfig) Init() {
 		logger.Fatal("Server Forced To Shutdown: %v", err)
 	}
 
-	logger.Info("Server Exiting")
+	logger.Info("--- Server Exiting ---")
 	defer logger.Info("--- Server Closed ---")
 }
