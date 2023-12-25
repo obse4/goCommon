@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/obse4/goCommon/jwt"
+	"github.com/obse4/goCommon/util"
 )
 
 func TestDefaultCreateJwtToken(t *testing.T) {
-	var jwtConfig = jwt.JwtConfig{
+	var jwtConfig = util.JwtConfig{
 		ExpiresTime: 60,
 		SecretKey:   "0518",
 	}
@@ -25,14 +25,14 @@ func TestDefaultCreateJwtToken(t *testing.T) {
 }
 
 func TestDefaultParseJwtToken(t *testing.T) {
-	var jwtConfig = jwt.JwtConfig{
+	var jwtConfig = util.JwtConfig{
 		ExpiresTime: 60,
 		SecretKey:   "0518",
 	}
 
-	var res jwt.StandardClaims
+	var res util.StandardClaims
 
-	err := jwtConfig.ParseToken("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MDMzMTc0ODd9.-RH3bk9DJbk1zcz_rSvp1jQdfxYOeGdU1oE9bLinj80", &res)
+	err := jwtConfig.ParseJwtToken("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MDMzMTc0ODd9.-RH3bk9DJbk1zcz_rSvp1jQdfxYOeGdU1oE9bLinj80", &res)
 
 	if err != nil {
 		fmt.Printf("parse jwt token err %s", err.Error())

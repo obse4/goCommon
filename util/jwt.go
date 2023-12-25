@@ -1,10 +1,10 @@
-package jwt
+package util
 
 import (
 	"fmt"
 	"time"
 
-	jwtGo "github.com/dgrijalva/jwt-go"
+	"github.com/dgrijalva/jwt-go"
 )
 
 type JwtConfig struct {
@@ -19,18 +19,18 @@ type Claims interface {
 }
 
 type StandardClaims struct {
-	jwtGo.StandardClaims
+	jwt.StandardClaims
 }
 
 // 创建jwt token
 // claims为nil时默认使用对象StandardClaims
 // 可自定义claims，需要继承StandardClaims
 func (j *JwtConfig) CreateJwtToken(claims Claims) (jwtToken string, err error) {
-	token := jwtGo.New(jwtGo.SigningMethodHS256)
+	token := jwt.New(jwt.SigningMethodHS256)
 
 	if claims == nil {
 		claims = StandardClaims{
-			jwtGo.StandardClaims{
+			jwt.StandardClaims{
 				ExpiresAt: time.Now().Add(time.Duration(j.ExpiresTime) * time.Second).Unix(),
 			},
 		}
@@ -54,14 +54,14 @@ func (j *JwtConfig) CreateJwtToken(claims Claims) (jwtToken string, err error) {
 // 解析token
 // tokenString 字符串token
 // claims 自定义继承StandardClaims的struct实例指针
-func (j *JwtConfig) ParseToken(tokenString string, claims Claims) error {
+func (j *JwtConfig) ParseJwtToken(tokenString string, claims Claims) error {
 	var err error
 	if tokenString == "" {
 		return fmt.Errorf("无效的token")
 	}
 
 	// 解析token
-	_, err = jwtGo.ParseWithClaims(tokenString, claims, func(t *jwtGo.Token) (interface{}, error) {
+	_, err = jwt.ParseWithClaims(tokenString, claims, func(t *jwt.Token) (interface{}, error) {
 		// !传参虽然定义了interface{}类型，但是如果不是[]byte会报错 `key is of invalid type`
 		if j.SecretKey == "" {
 			return nil, nil
