@@ -16,6 +16,7 @@ func TestConfig(t *testing.T) {
 		Id    int
 		Other OtherConfig
 		List  []OtherConfig
+		Arr   []string
 	}
 
 	config.InitConfig("config", &GlobalConfig)

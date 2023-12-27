@@ -29,7 +29,7 @@ func InitConfig(folder string, config any) {
 	v.AddConfigPath(configPath)
 
 	if err := v.ReadInConfig(); err != nil {
-		logger.Fatal("Config config read error:%s", err.Error())
+		logger.Fatal("Config read error:%s", err.Error())
 	}
 	if err := v.Unmarshal(&config); err != nil {
 		logger.Fatal("Config unmarshal json error:%s", err.Error())

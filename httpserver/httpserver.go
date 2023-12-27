@@ -34,7 +34,7 @@ func NewHttpServer(conf *HttpServerConfig) {
 	router.Use(Cors())
 
 	// debug级别httpserver日志
-	router.Use(Logger())
+	router.Use(DebugLogger())
 
 	// 端口
 	if conf.Port == "" {
@@ -88,7 +88,7 @@ func Cors() gin.HandlerFunc {
 	}
 }
 
-func Logger() gin.HandlerFunc {
+func DebugLogger() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		startTime := time.Now()
 		ctx.Next()
