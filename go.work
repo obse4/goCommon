@@ -1,9 +1,10 @@
 go 1.21
 
 use (
+	./config
 	./database
 	./httpserver
+	./kafka
 	./logger
 	./util
-	./config
 )
