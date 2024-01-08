@@ -36,6 +36,7 @@ func TestNewConsumer(t *testing.T) {
 		Topics:          []string{"test"},
 		GroupId:         "consumer_test",
 		AutoOffsetReset: "earliest",
+		BlockingPool:    2,
 	}
 	kafka.NewKafkaConsumer(&kafkaConsumer)
 

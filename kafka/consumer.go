@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"os/signal"
+	"sync"
 	"syscall"
 	"time"
 
@@ -21,6 +22,7 @@ type KafkaConsumerConfig struct {
 	MaxWaitTime       int       // 从Kafka获取记录的最大等待时间（毫秒）默认250ms
 	SessionTimeout    int       // 消费者组会话的超时时间（毫秒）默认10000ms
 	HeartbeatInterval int       // 心跳间隔时间（毫秒）默认3000ms
+	BlockingPool      int       // 阻塞协程池大小 默认1 即单线消费 谨慎使用
 	Consumer          *Consumer // 消费者指针
 }
 
@@ -29,6 +31,7 @@ type Consumer struct {
 	topics   []string
 	consumer sarama.ConsumerGroup
 	handler  ConsumerGroupHandler
+	pool     int
 }
 
 type ConsumerGroupHandler interface {
@@ -57,6 +60,10 @@ func NewKafkaConsumer(config *KafkaConsumerConfig) {
 		saramaConfig.Consumer.Group.Heartbeat.Interval = time.Duration(config.HeartbeatInterval) * time.Millisecond
 	}
 
+	if config.BlockingPool == 0 {
+		config.BlockingPool = 1
+	}
+
 	consumer, err := sarama.NewConsumerGroup(config.Brokers, config.GroupId, saramaConfig)
 	if err != nil {
 		logger.Fatal("Kafka new consumer %s err %s", config.Name, err.Error())
@@ -66,6 +73,7 @@ func NewKafkaConsumer(config *KafkaConsumerConfig) {
 	config.Consumer = &Consumer{
 		name:     config.Name,
 		topics:   config.Topics,
+		pool:     config.BlockingPool,
 		consumer: consumer,
 	}
 	logger.Info("Kafka new consumer %s success", config.Name)
@@ -80,6 +88,7 @@ func (c *Consumer) RegisterHandle(f ConsumeFunction, mark bool) {
 		name:        c.name,
 		consumeFunc: f,
 		mark:        mark,
+		pool:        c.pool,
 	}
 	c.handler = handle
 
@@ -141,6 +150,7 @@ func (c *Consumer) Consume(ctx context.Context) error {
 }
 
 type consumerGroupHandler struct {
+	pool        int
 	name        string
 	consumeFunc ConsumeFunction
 	mark        bool
@@ -168,21 +178,40 @@ func (h consumerGroupHandler) Cleanup(sarama.ConsumerGroupSession) error { retur
 
 // ConsumeClaim 必须启动一个消费者循环，处理 ConsumerGroupClaim 的 Messages()
 func (h consumerGroupHandler) ConsumeClaim(sess sarama.ConsumerGroupSession, claim sarama.ConsumerGroupClaim) error {
-	for msg := range claim.Messages() {
-		logger.Debug("Kafka consumer %s receive message topic %s val %s", h.name, msg.Topic, string(msg.Value))
-		// 在这里处理你的消息
-		// 标记消息已处理
+	var (
+		wg    sync.WaitGroup
+		tasks = make(chan func())
+	)
 
-		err := h.consumeFunc(&ConsumerMessage{ConsumerMessage: *msg}, sess, claim)
-
-		if err != nil {
-			logger.Error("Kafka consumer %s receive message topic %s val %s handle err %v", h.name, msg.Topic, string(msg.Value), err)
-			return err
-		}
-
-		if h.mark {
-			sess.MarkMessage(msg, "")
-		}
+	for i := 0; i < h.pool; i++ {
+		go func() {
+			for task := range tasks {
+				task()
+				wg.Done()
+			}
+		}()
 	}
+
+	for msg := range claim.Messages() {
+		wg.Add(1)
+		tasks <- func() {
+			logger.Debug("Kafka consumer %s receive message partition %d offset %d topic %s val %s", h.name, msg.Partition, msg.Offset, msg.Topic, string(msg.Value))
+			// 在这里处理你的消息
+			// 标记消息已处理
+			err := h.consumeFunc(&ConsumerMessage{ConsumerMessage: *msg}, sess, claim)
+
+			if err != nil {
+				logger.Error("Kafka consumer %s receive message topic %s val %s handle err %v", h.name, msg.Topic, string(msg.Value), err)
+				return
+			}
+
+			if h.mark {
+				sess.MarkMessage(msg, "")
+				logger.Debug("Kafka consumer %s mark message partition %d offset %d", h.name, msg.Partition, msg.Offset)
+			}
+		}
+		wg.Wait()
+	}
+
 	return nil
 }
