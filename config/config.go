@@ -34,7 +34,7 @@ func InitConfig(folder string, config any) {
 	if err := v.Unmarshal(&config); err != nil {
 		logger.Fatal("Config unmarshal json error:%s", err.Error())
 	}
-	logger.Info("Config %+v\n", config)
+	logger.Info("Config read %s.yml %+v\n", fileName, config)
 }
 
 func getExeDir() string {
