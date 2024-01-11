@@ -4,37 +4,36 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/spf13/viper"
-
 	"github.com/obse4/goCommon/logger"
+	"gopkg.in/yaml.v3"
 )
 
-// folder 配置文件在执行文件下的相对路径 例如：global
-// config 全局配置struct
-// 配置环境变量CONFIG_MODE来控制配置文件名，不需要加后缀
-// 例如/config/global.yml CONFIG_MODE=global
-func InitConfig(folder string, config any) {
-	fileName := os.Getenv("CONFIG_MODE")
-	if fileName == "" {
-		fileName = "env"
-	}
-	v := viper.New()
-	v.SetConfigName(fileName)
-	v.SetConfigType("yml")
-	configPath := getExeDir()
-	if folder != "" {
-		configPath = filepath.Join(getExeDir(), folder)
+// path 配置文件绝对路径 例如：/config/global.yml
+// config 配置struct指针
+// 可配置环境变量CONFIG_PATH来控制配置文件路径，权重最高 // 例如/config/global.yml CONFIG_PATH=/config/global.yml
+// InitConfig函数配置的path权重其次
+// path为空，默认使用当前执行文件所在目录下的config.yml文件
+
+func InitConfig(path string, config any) {
+	if os.Getenv("CONFIG_PATH") != "" {
+		path = os.Getenv("CONFIG_PATH")
+	} else if path == "" {
+		path = getExeDir() + "/config.yml"
 	}
 
-	v.AddConfigPath(configPath)
+	data, err := os.ReadFile(path)
 
-	if err := v.ReadInConfig(); err != nil {
+	if err != nil {
 		logger.Fatal("Config read error:%s", err.Error())
 	}
-	if err := v.Unmarshal(&config); err != nil {
+
+	err = yaml.Unmarshal(data, config)
+
+	if err != nil {
 		logger.Fatal("Config unmarshal json error:%s", err.Error())
 	}
-	logger.Info("Config read %s.yml %+v\n", fileName, config)
+
+	logger.Info("Config read %s %+v\n", path, config)
 }
 
 func getExeDir() string {
