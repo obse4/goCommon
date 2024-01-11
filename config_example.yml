@@ -1,0 +1,89 @@
+httpServer:
+  port: "9518"
+  mode: "debug"
+log:
+  logLevel: 0
+  logOut: false
+  logFile: ""
+  stayDay: 1
+mongodb:
+  - name: "mongo1"
+    username: ""
+    password: ""
+    url: "127.0.0.1"
+    port: "27017"
+    database: "test1"
+  - name: "mongo2"
+    username: ""
+    password: ""
+    url: "127.0.0.1"
+    port: "27017"
+    database: "test2"
+mysql:
+  - name: "mysql1"
+    username: "root"
+    password: "123456"
+    url: "127.0.0.1"
+    port: "3306"
+    database: "test1"
+  - name: "mysql2"
+    username: "root"
+    password: "123456"
+    url: "127.0.0.1"
+    port: "3306"
+    database: "test2"
+postgres:
+  - name: "pg1"
+    username: "postgres"
+    password: "123456"
+    url: "127.0.0.1"
+    port: "5432"
+    database: "test1"
+  - name: "pg2"
+    username: "postgres"
+    password: "123456"
+    url: "127.0.0.1"
+    port: "5432"
+    database: "test2"
+kafkaConsumer:
+  - name: "consumer1"
+    brokers: ["127.0.0.1:9092"]
+    topics: ["topic1"]
+    autoOffsetReset: "earliest"
+    groupId: "group1"
+    maxWaitTime: 250
+    sessionTimeout: 10000
+    heartbeatInterval: 3000
+    blockingPool: 2
+  - name: "consumer2"
+    brokers: ["127.0.0.1:9092"]
+    topics: ["topic2"]
+    autoOffsetReset: "earliest"
+    groupId: "group2"
+    maxWaitTime: 250
+    sessionTimeout: 10000
+    heartbeatInterval: 3000
+    blockingPool: 2
+kafkaProducer:
+  - name: "producer1"
+    brokers: ["127.0.0.1:9092"]
+    topic: "topic1"
+    compression: "gzip"
+    timeout: 30000             
+    batchSize: 5           
+    batchTime: 1000           
+    waitForAll: false          
+    maxRetries: 3          
+    retryBackoff: 100         
+    newManualPartitioner: false
+  - name: "producer2"
+    brokers: ["127.0.0.1:9092"]
+    topic: "topic2"
+    compression: "gzip"
+    timeout: 30000             
+    batchSize: 5           
+    batchTime: 1000           
+    waitForAll: false          
+    maxRetries: 3          
+    retryBackoff: 100         
+    newManualPartitioner: false 

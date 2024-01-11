@@ -75,7 +75,7 @@ func (p Producer) SendMessage(msg ProducerMessage) error {
 	return nil
 }
 
-func NewKafkaProducer(config *KafkaProducerConfig) {
+func NewKafkaProducer(config *KafkaProducerConfig) *Producer {
 	saramaConfig := sarama.NewConfig()
 
 	// 配置压缩方式
@@ -133,7 +133,7 @@ func NewKafkaProducer(config *KafkaProducerConfig) {
 
 	if err != nil {
 		logger.Fatal("Kafka new producer %s err %s", config.Name, err.Error())
-		return
+
 	}
 
 	config.Producer = &Producer{
@@ -143,4 +143,6 @@ func NewKafkaProducer(config *KafkaProducerConfig) {
 	}
 
 	logger.Info("Kafka new producer %s success", config.Name)
+
+	return config.Producer
 }

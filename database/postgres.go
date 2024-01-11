@@ -8,7 +8,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func InitPostgresConnect(database *PostgresConfig) {
+func InitPostgresConnect(database *PostgresConfig) *gorm.DB {
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable TimeZone=Asia/Shanghai", database.Url, database.Username, database.Password, database.Database, database.Port)
 
 	var err error
@@ -19,6 +19,8 @@ func InitPostgresConnect(database *PostgresConfig) {
 	}
 
 	logger.Info("Postgres 数据库 %s 连接成功", database.Name)
+
+	return database.Db
 }
 
 type PostgresConfig struct {

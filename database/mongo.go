@@ -24,7 +24,7 @@ type MongoConfig struct {
 }
 
 // 初始化数据库
-func InitMongoDBConnect(mongoose *MongoConfig) {
+func InitMongoDBConnect(mongoose *MongoConfig) *mongo.Database {
 	var url string
 	if mongoose.Username != "" {
 		url = fmt.Sprintf("mongodb://%s:%s@%s:%s/%s", mongoose.Username, mongoose.Password, mongoose.Url, mongoose.Port, mongoose.Database)
@@ -52,6 +52,8 @@ func InitMongoDBConnect(mongoose *MongoConfig) {
 
 	mongoose.Db = client.Database(mongoose.Database)
 	logger.Info("Mongo %s 连接成功", mongoose.Name)
+
+	return mongoose.Db
 }
 
 // 注册表和索引

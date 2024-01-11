@@ -39,7 +39,7 @@ type ConsumerGroupHandler interface {
 }
 
 // 新建消费者
-func NewKafkaConsumer(config *KafkaConsumerConfig) {
+func NewKafkaConsumer(config *KafkaConsumerConfig) *Consumer {
 	saramaConfig := sarama.NewConfig()
 
 	saramaConfig.Consumer.Return.Errors = true
@@ -67,7 +67,6 @@ func NewKafkaConsumer(config *KafkaConsumerConfig) {
 	consumer, err := sarama.NewConsumerGroup(config.Brokers, config.GroupId, saramaConfig)
 	if err != nil {
 		logger.Fatal("Kafka new consumer %s err %s", config.Name, err.Error())
-		return
 	}
 
 	config.Consumer = &Consumer{
@@ -77,6 +76,8 @@ func NewKafkaConsumer(config *KafkaConsumerConfig) {
 		consumer: consumer,
 	}
 	logger.Info("Kafka new consumer %s success", config.Name)
+
+	return config.Consumer
 }
 
 // 注册处理方法

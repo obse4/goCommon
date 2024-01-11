@@ -3,3 +3,4 @@
 /logger/test/log
 /httpserver/docs
 /kafka/test/*.yml
+config.yml

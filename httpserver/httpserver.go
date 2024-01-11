@@ -23,7 +23,7 @@ type HttpServerConfig struct {
 	Router *gin.Engine
 }
 
-func NewHttpServer(conf *HttpServerConfig) {
+func NewHttpServer(conf *HttpServerConfig) *gin.Engine {
 	gin.SetMode(conf.Mode)
 	router := gin.New()
 
@@ -42,6 +42,8 @@ func NewHttpServer(conf *HttpServerConfig) {
 	}
 
 	conf.Router = router
+
+	return router
 }
 
 // Recover

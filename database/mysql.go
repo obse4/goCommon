@@ -20,7 +20,7 @@ type MysqlConfig struct {
 	Db       *gorm.DB // 数据库指针
 }
 
-func InitMysqlConnect(database *MysqlConfig) {
+func InitMysqlConnect(database *MysqlConfig) *gorm.DB {
 	if database.Charset == "" {
 		database.Charset = "utf8"
 	}
@@ -47,4 +47,6 @@ func InitMysqlConnect(database *MysqlConfig) {
 	}
 
 	logger.Info("Mysql 数据库 %s 连接成功", database.Name)
+
+	return database.Db
 }
