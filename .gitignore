@@ -4,3 +4,4 @@
 /httpserver/docs
 /kafka/test/*.yml
 config.yml
+.vscode
