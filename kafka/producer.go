@@ -8,17 +8,17 @@ import (
 )
 
 type KafkaProducerConfig struct {
-	Name                 string    // 自定义名称
-	Brokers              []string  // broker集群地址 例如["127.0.0.1:9092", "127.0.0.2:9092"]
-	Topic                string    // topic 默认发送消息的topic，可在SendMessage中重新配置
-	Compression          string    // 消息压缩方式，可选的值包括"gzip"、"snappy"、"lz4"、"zstd"、"none" 默认"gzip"
-	Timeout              int       // 发送消息的超时时间，单位为毫秒 默认30000ms
-	BatchSize            int       // 批量发送的消息数量，超过这个数量后就发送 默认0，即实时发送 与BatchTime连用生效
-	BatchTime            int       // 批量发送的时间间隔，超过这个时间就发送，单位为毫秒 默认0，即实时发送 与BatchSize连用生效
-	WaitForAll           bool      // 是否等待服务器所有副本都保存成功后再返回 默认false
-	MaxRetries           int       // 重试的最大次数 默认3
-	RetryBackoff         int       // 两次重试之间的时间间隔，单位为毫秒 默认100ms
-	NewManualPartitioner bool      // 是否手动分配分区 默认false
+	Name                 string    `yaml:"name"`                 // 自定义名称
+	Brokers              []string  `yaml:"brokers"`              // broker集群地址 例如["127.0.0.1:9092", "127.0.0.2:9092"]
+	Topic                string    `yaml:"topic"`                // topic 默认发送消息的topic，可在SendMessage中重新配置
+	Compression          string    `yaml:"compression"`          // 消息压缩方式，可选的值包括"gzip"、"snappy"、"lz4"、"zstd"、"none" 默认"gzip"
+	Timeout              int       `yaml:"timeout"`              // 发送消息的超时时间，单位为毫秒 默认30000ms
+	BatchSize            int       `yaml:"batchSize"`            // 批量发送的消息数量，超过这个数量后就发送 默认0，即实时发送 与BatchTime连用生效
+	BatchTime            int       `yaml:"batchTime"`            // 批量发送的时间间隔，超过这个时间就发送，单位为毫秒 默认0，即实时发送 与BatchSize连用生效
+	WaitForAll           bool      `yaml:"waitForAll"`           // 是否等待服务器所有副本都保存成功后再返回 默认false
+	MaxRetries           int       `yaml:"maxRetries"`           // 重试的最大次数 默认3
+	RetryBackoff         int       `yaml:"retryBackoff"`         // 两次重试之间的时间间隔，单位为毫秒 默认100ms
+	NewManualPartitioner bool      `yaml:"newManualPartitioner"` // 是否手动分配分区 默认false
 	Producer             *Producer // 生产者指针
 }
 

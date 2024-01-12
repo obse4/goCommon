@@ -8,14 +8,14 @@ import (
 )
 
 type RedisConfig struct {
-	Name     string      // 自定义名称
-	Url      string      // url连接
-	Port     string      // 端口
-	Password string      // 密码 非必填
+	Name     string      `yaml:"name"`     // 自定义名称
+	Url      string      `yaml:"url"`      // url连接
+	Port     string      `yaml:"port"`     // 端口
+	Password string      `yaml:"password"` // 密码 非必填
 	Pool     *redis.Pool // redis连接池
 }
 
-func InitRedisPool(database *RedisConfig) {
+func InitRedisPool(database *RedisConfig) *redis.Pool {
 	database.Pool = &redis.Pool{
 		MaxIdle: 0,
 		Wait:    true,
@@ -42,6 +42,8 @@ func InitRedisPool(database *RedisConfig) {
 	} else {
 		logger.Fatal("Redis %s 连接失败", database.Name)
 	}
+
+	return database.Pool
 }
 
 func GetRedisConn(pool *redis.Pool, db int) redis.Conn {

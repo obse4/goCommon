@@ -14,12 +14,12 @@ import (
 )
 
 type MongoConfig struct {
-	Name     string          // 自定义名称
-	Username string          // 用户名
-	Password string          // 密码
-	Url      string          // url链接
-	Port     string          // 端口
-	Database string          // 数据库名称
+	Name     string          `yaml:"name"`     // 自定义名称
+	Username string          `yaml:"username"` // 用户名
+	Password string          `yaml:"password"` // 密码
+	Url      string          `yaml:"url"`      // url链接
+	Port     string          `yaml:"port"`     // 端口
+	Database string          `yaml:"database"` // 数据库名称
 	Db       *mongo.Database // 数据库指针
 }
 

@@ -45,6 +45,15 @@ postgres:
     url: "127.0.0.1"
     port: "5432"
     database: "test2"
+redis:
+  - name: "redis1"
+    url: "127.0.0.1"
+    port: "6379"
+    password: "123456"
+  - name: "redis1"
+    url: "127.0.0.2"
+    port: "6379"
+    password: "123456"
 kafkaConsumer:
   - name: "consumer1"
     brokers: ["127.0.0.1:9092"]

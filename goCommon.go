@@ -2,6 +2,7 @@ package comm
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/gomodule/redigo/redis"
 	"github.com/obse4/goCommon/config"
 	"github.com/obse4/goCommon/database"
 	"github.com/obse4/goCommon/httpserver"
@@ -16,6 +17,7 @@ var (
 	Mysql         = make(map[string]*gorm.DB)
 	Mongodb       = make(map[string]*mongo.Database)
 	Postgres      = make(map[string]*gorm.DB)
+	Redis         = make(map[string]*redis.Pool)
 	KafkaProducer = make(map[string]*kafka.Producer)
 	KafkaConsumer = make(map[string]*kafka.Consumer)
 )
@@ -26,6 +28,7 @@ type goCommonConfig struct {
 	Mysql         []database.MysqlConfig      `yaml:"mysql"`
 	Mongodb       []database.MongoConfig      `yaml:"mongodb"`
 	Postgres      []database.PostgresConfig   `yaml:"postgres"`
+	Redis         []database.RedisConfig      `yaml:"redis"`
 	KafkaProducer []kafka.KafkaProducerConfig `yaml:"kafkaProducer"`
 	KafkaConsumer []kafka.KafkaConsumerConfig `yaml:"kafkaConsumer"`
 }
@@ -56,7 +59,9 @@ func Init(configPath string) {
 	for _, v := range initConfig.Postgres {
 		Postgres[v.Name] = database.InitPostgresConnect(&v)
 	}
-
+	for _, v := range initConfig.Redis {
+		Redis[v.Name] = database.InitRedisPool(&v)
+	}
 	// 初始化kafka
 	for _, v := range initConfig.KafkaProducer {
 		KafkaProducer[v.Name] = kafka.NewKafkaProducer(&v)

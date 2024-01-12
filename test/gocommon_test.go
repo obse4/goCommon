@@ -13,7 +13,7 @@ import (
 
 func TestGoCommon(t *testing.T) {
 	t.Log("goCommon test")
-	comm.Init("/Users/wanghan/github/goCommon/config.yml")
+	comm.Init("/github/goCommon/config.yml")
 
 	comm.KafkaProducer["producer1"].SendMessage(kafka.ProducerMessage{
 		Topic: "test",

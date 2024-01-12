@@ -18,8 +18,8 @@ import (
 
 type HttpServerConfig struct {
 	// 端口号 不填使用默认端口号8080
-	Port   string
-	Mode   string `json:"mode" default:"debug" example:"debug/release/test"`
+	Port   string `yaml:"port"`
+	Mode   string `yaml:"mode" default:"debug" example:"debug/release/test"`
 	Router *gin.Engine
 }
 

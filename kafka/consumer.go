@@ -14,15 +14,15 @@ import (
 )
 
 type KafkaConsumerConfig struct {
-	Name              string    // 自定义名称
-	Brokers           []string  // broker集群地址 例如["127.0.0.1:9092", "127.0.0.2:9092"]
-	Topics            []string  // topics
-	AutoOffsetReset   string    // 开始消费的位置，可能的值包括'earliest'、'latest' 默认‘latest’
-	GroupId           string    // 消费组id
-	MaxWaitTime       int       // 从Kafka获取记录的最大等待时间（毫秒）默认250ms
-	SessionTimeout    int       // 消费者组会话的超时时间（毫秒）默认10000ms
-	HeartbeatInterval int       // 心跳间隔时间（毫秒）默认3000ms
-	BlockingPool      int       // 阻塞协程池大小 默认1 即单线消费 谨慎使用
+	Name              string    `yaml:"name"`              // 自定义名称
+	Brokers           []string  `yaml:"brokers"`           // broker集群地址 例如["127.0.0.1:9092", "127.0.0.2:9092"]
+	Topics            []string  `yaml:"topics"`            // topics
+	AutoOffsetReset   string    `yaml:"autoOffsetReset"`   // 开始消费的位置，可能的值包括'earliest'、'latest' 默认‘latest’
+	GroupId           string    `yaml:"groupId"`           // 消费组id
+	MaxWaitTime       int       `yaml:"maxWaitTime"`       // 从Kafka获取记录的最大等待时间（毫秒）默认250ms
+	SessionTimeout    int       `yaml:"sessionTimeout"`    // 消费者组会话的超时时间（毫秒）默认10000ms
+	HeartbeatInterval int       `yaml:"heartbeatInterval"` // 心跳间隔时间（毫秒）默认3000ms
+	BlockingPool      int       `yaml:"blockingPool"`      // 阻塞协程池大小 默认1 即单线消费 谨慎使用
 	Consumer          *Consumer // 消费者指针
 }
 

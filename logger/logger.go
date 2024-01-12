@@ -49,14 +49,14 @@ const (
 // 日志配置
 type LogConfig struct {
 	// 默认的LogLevel为0，即所有级别的日志都打印
-	LogLevel LogLeveL
+	LogLevel LogLeveL `yaml:"logLevel"`
 	// 是否输出日志文件
-	LogOut bool
+	LogOut bool `yaml:"logOut"`
 	// 文件所在文件夹位置, 默认执行文件所在目录的log文件夹下
 	// 使用绝对路径
-	LogFile string
+	LogFile string `yaml:"logFile"`
 	// 输出日志文件保存时间, 默认0，即全部保存，1则只保留当日
-	StayDay int
+	StayDay int `yaml:"stayDay"`
 }
 
 // 初始化日志

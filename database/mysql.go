@@ -10,13 +10,13 @@ import (
 )
 
 type MysqlConfig struct {
-	Name     string   // 自定义名称
-	Username string   // 用户名
-	Password string   // 密码
-	Database string   // 数据库
-	Url      string   // url地址
-	Port     string   // 端口
-	Charset  string   // 编码方式 不填默认utf8
+	Name     string   `yaml:"name"`     // 自定义名称
+	Username string   `yaml:"username"` // 用户名
+	Password string   `yaml:"password"` // 密码
+	Database string   `yaml:"database"` // 数据库
+	Url      string   `yaml:"url"`      // url地址
+	Port     string   `yaml:"port"`     // 端口
+	Charset  string   `yaml:"charset"`  // 编码方式 不填默认utf8
 	Db       *gorm.DB // 数据库指针
 }
 
