@@ -181,7 +181,7 @@ func (h consumerGroupHandler) Cleanup(sarama.ConsumerGroupSession) error { retur
 func (h consumerGroupHandler) ConsumeClaim(sess sarama.ConsumerGroupSession, claim sarama.ConsumerGroupClaim) error {
 	var (
 		wg    sync.WaitGroup
-		tasks = make(chan func())
+		tasks = make(chan func(), h.pool)
 	)
 
 	for i := 0; i < h.pool; i++ {
@@ -194,25 +194,25 @@ func (h consumerGroupHandler) ConsumeClaim(sess sarama.ConsumerGroupSession, cla
 	}
 
 	for msg := range claim.Messages() {
+		message := msg
 		wg.Add(1)
 		tasks <- func() {
-			logger.Debug("Kafka consumer %s receive message partition %d offset %d topic %s val %s", h.name, msg.Partition, msg.Offset, msg.Topic, string(msg.Value))
+			logger.Debug("Kafka consumer %s receive message partition %d offset %d topic %s val %s", h.name, message.Partition, message.Offset, message.Topic, string(message.Value))
 			// 在这里处理你的消息
 			// 标记消息已处理
-			err := h.consumeFunc(&ConsumerMessage{ConsumerMessage: *msg}, sess, claim)
+			err := h.consumeFunc(&ConsumerMessage{ConsumerMessage: *message}, sess, claim)
 
 			if err != nil {
-				logger.Error("Kafka consumer %s receive message topic %s val %s handle err %v", h.name, msg.Topic, string(msg.Value), err)
+				logger.Error("Kafka consumer %s receive message topic %s val %s handle err %v", h.name, message.Topic, string(message.Value), err)
 				return
 			}
 
 			if h.mark {
-				sess.MarkMessage(msg, "")
-				logger.Debug("Kafka consumer %s mark message partition %d offset %d", h.name, msg.Partition, msg.Offset)
+				sess.MarkMessage(message, "")
+				logger.Debug("Kafka consumer %s mark message partition %d offset %d", h.name, message.Partition, message.Offset)
 			}
 		}
-		wg.Wait()
 	}
-
+	wg.Wait()
 	return nil
 }

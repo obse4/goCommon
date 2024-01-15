@@ -18,15 +18,17 @@ func TestNewProducer(t *testing.T) {
 
 	kafka.NewKafkaProducer(&kafkaProducer)
 
-	err := kafkaProducer.Producer.SendMessage(kafka.ProducerMessage{
-		Topic: "test",
-		Value: "obse4^-^",
-	})
-
-	if err != nil {
-		fmt.Printf("new message err %s\n", err.Error())
-		t.Fail()
+	for i := 0; i < 50; i++ {
+		err := kafkaProducer.Producer.SendMessage(kafka.ProducerMessage{
+			Topic: "test",
+			Value: fmt.Sprintf("obse4^-^ %d", i),
+		})
+		if err != nil {
+			fmt.Printf("new message err %s\n", err.Error())
+			t.Fail()
+		}
 	}
+
 }
 
 func TestNewConsumer(t *testing.T) {
@@ -36,12 +38,13 @@ func TestNewConsumer(t *testing.T) {
 		Topics:          []string{"test"},
 		GroupId:         "consumer_test",
 		AutoOffsetReset: "earliest",
-		BlockingPool:    2,
+		BlockingPool:    4,
 	}
 	kafka.NewKafkaConsumer(&kafkaConsumer)
 
 	go func() {
 		kafkaConsumer.Consumer.RegisterHandle(func(msg *kafka.ConsumerMessage, sess kafka.ConsumerGroupSession, claim kafka.ConsumerGroupClaim) error {
+			time.Sleep(time.Second)
 			fmt.Printf("topic %s val %s, timestamp %s\n", msg.Topic, msg.Value, msg.Timestamp.Format("2006-01-02 15:04:05"))
 			return nil
 		}, true)
